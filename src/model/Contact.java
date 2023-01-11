@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-public class Contact {
+public class Contact implements Comparable<Contact>{
     private static final String SEPARATEUR = ";";
     private static final Pattern CSV_PATTERN = Pattern.compile(SEPARATEUR);
     private String nom;
@@ -116,5 +116,14 @@ public class Contact {
         build.append(SEPARATEUR);
         build.append(this.getDateNaissance());
         return build.toString();
+    }
+
+    @Override
+    public int compareTo(Contact other) {
+       int nomCompare = this.nom.compareTo(other.nom);
+        if(nomCompare != 0)
+            return nomCompare;
+        else
+            return this.prenom.compareTo(other.prenom);
     }
 }
