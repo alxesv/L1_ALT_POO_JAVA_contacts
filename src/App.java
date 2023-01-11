@@ -37,7 +37,7 @@ public class App {
                     triParNom();
                 }
                 case "8" -> {
-                    listeContact(chercherParNom());
+                    listeContact(chercherParPrenom());
                 }
                 case "q" -> {
                     System.out.println("Exiting --");
@@ -159,7 +159,7 @@ public class App {
             e.printStackTrace();
         }
     }
-    private static ArrayList<Contact> chercherParNom() {
+    private static ArrayList<Contact> chercherParPrenom() {
         try{
             ArrayList<Contact> list = Contact.lister();
             System.out.println("Prénom commençant par :");
