@@ -2,7 +2,11 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import model.Contact;
 
 public class App {
@@ -32,6 +36,9 @@ public class App {
                 case "5" -> {
                     triParNom();
                 }
+                case "8" -> {
+                    listeContact(chercherParPrenom());
+                }
                 case "q" -> {
                     System.out.println("Exiting --");
                     return;
@@ -49,6 +56,7 @@ public class App {
         menus.add("3 - Modifier un contact");
         menus.add("4 - Supprimer un contact");
         menus.add("5 - Trier par nom");
+        menus.add("8 - Chercher par prénom");
         menus.add("q - Quitter");
         menus.add("Veuillez entrer un choix");
         for (String menu : menus){
@@ -149,6 +157,21 @@ public class App {
             listeContact(list);
         }catch (Exception e){
             e.printStackTrace();
+        }
+    }
+    private static ArrayList<Contact> chercherParPrenom() {
+        try{
+            ArrayList<Contact> list = Contact.lister();
+            System.out.println("Prénom commençant par :");
+            String recherche = scan.nextLine();
+            List<Contact> filteredList = list.stream().filter(c -> c.getPrenom().toLowerCase().startsWith(recherche.toLowerCase())).toList();
+            if(filteredList.isEmpty()){
+                System.out.println("Pas de résultat");
+            }
+            return new ArrayList<>(filteredList);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
     }
 }
