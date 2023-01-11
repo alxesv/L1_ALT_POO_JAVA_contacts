@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 import model.Contact;
 
@@ -17,7 +18,7 @@ public class App {
                     newContact.enregistrer();
                     System.out.println("Contact enregistré !");
                 }
-                case "2" -> listeContact();
+                case "2" -> listeContact(null);
                 case "3" -> {
                     System.out.println("Entrez l'adresse email actuelle du contact à modifier");
                     String mail = scan.nextLine();
@@ -28,6 +29,9 @@ public class App {
                     String mail = scan.nextLine();
                     supprimerContact(mail);
                 }
+                case "5" -> {
+                    triParNom();
+                }
                 case "q" -> {
                     System.out.println("Exiting --");
                     return;
@@ -36,6 +40,7 @@ public class App {
             }
         }
     }
+
     public static void afficherMenu(){
         ArrayList<String> menus = new ArrayList<>();
         menus.add("-- Menu --");
@@ -43,6 +48,7 @@ public class App {
         menus.add("2 - Lister les contacts");
         menus.add("3 - Modifier un contact");
         menus.add("4 - Supprimer un contact");
+        menus.add("5 - Trier par nom");
         menus.add("q - Quitter");
         menus.add("Veuillez entrer un choix");
         for (String menu : menus){
@@ -101,12 +107,19 @@ public class App {
         }
         return nouveauContact;
     }
-    public static void listeContact() {
+    public static void listeContact(ArrayList<Contact> contactList) {
         try {
-            ArrayList<Contact> list = Contact.lister();
-            for (Contact contact : list) {
-                System.out.println("Nom : " + contact.getNom() + "\nPrénom : " + contact.getPrenom() + "\nEmail : " + contact.getMail() + "\nTéléphone : " + contact.getTelephone() + "\nDate de naissance : " + contact.getDateNaissance());
-                System.out.println();
+            if(contactList != null){
+                for (Contact contact : contactList) {
+                    System.out.println("Nom : " + contact.getNom() + "\nPrénom : " + contact.getPrenom() + "\nEmail : " + contact.getMail() + "\nTéléphone : " + contact.getTelephone() + "\nDate de naissance : " + contact.getDateNaissance());
+                    System.out.println();
+                }
+            }else {
+                ArrayList<Contact> list = Contact.lister();
+                for (Contact contact : list) {
+                    System.out.println("Nom : " + contact.getNom() + "\nPrénom : " + contact.getPrenom() + "\nEmail : " + contact.getMail() + "\nTéléphone : " + contact.getTelephone() + "\nDate de naissance : " + contact.getDateNaissance());
+                    System.out.println();
+                }
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -128,5 +141,14 @@ public class App {
         };
         Contact.supprimer(mail);
         System.out.println("Contact supprimé");
+    }
+    private static void triParNom() {
+        try{
+            ArrayList<Contact> list = Contact.lister();
+            Collections.sort(list);
+            listeContact(list);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
