@@ -56,7 +56,7 @@ public class App {
         menus.add("3 - Modifier un contact");
         menus.add("4 - Supprimer un contact");
         menus.add("5 - Trier par nom");
-        menus.add("8 - Chercher par nom");
+        menus.add("8 - Chercher par prénom");
         menus.add("q - Quitter");
         menus.add("Veuillez entrer un choix");
         for (String menu : menus){
