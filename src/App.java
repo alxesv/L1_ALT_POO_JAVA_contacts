@@ -13,7 +13,11 @@ public class App {
             afficherMenu();
             String choix = scan.nextLine();
             switch (choix) {
-                case "1" -> ajouterContact();
+                case "1" -> {
+                    Contact newContact = createContact(null);
+                    newContact.enregistrer();
+                    System.out.println("Contact enregistré !");
+                }
                 case "2" -> listeContact(null);
                 case "3" -> {
                     System.out.println("Entrez l'adresse email actuelle du contact à modifier");
@@ -52,15 +56,30 @@ public class App {
         }
     }
 
-    public static void ajouterContact() throws IOException {
+    public static Contact createContact(Contact PlaceHolderContact) throws IOException {
         Contact nouveauContact = new Contact();
-        System.out.println("Nom :");
+        String nomText, prenomText, mailText, telephoneText, dateNaissanceText;
+
+        if(PlaceHolderContact != null){
+            nomText = "Nom (" + PlaceHolderContact.getNom() + "):";
+            prenomText = "Prénom (" + PlaceHolderContact.getPrenom() + "):";
+            mailText = "Adresse mail (" + PlaceHolderContact.getMail() + "):";
+            telephoneText = "Numéro de téléphone (" + PlaceHolderContact.getTelephone() + "):";
+            dateNaissanceText = "Date de naissance (format dd/MM/yyyy) (" + PlaceHolderContact.getDateNaissance() + "):";
+        }else{
+            nomText = "Nom :";
+            prenomText = "Prénom :";
+            mailText = "Adresse mail :";
+            telephoneText = "Numéro de téléphone :";
+            dateNaissanceText = "Date de naissance (format dd/MM/yyyy) :";
+        }
+        System.out.println(nomText);
         nouveauContact.setNom(scan.nextLine());
-        System.out.println("Prénom :");
+        System.out.println(prenomText);
         nouveauContact.setPrenom(scan.nextLine());
         while(true) {
             try {
-                System.out.println("Adresse mail :");
+                System.out.println(mailText);
                 nouveauContact.setMail(scan.nextLine());
                 break;
             } catch (ParseException e) {
@@ -69,7 +88,7 @@ public class App {
         }
         while(true) {
             try {
-                System.out.println("Numéro de téléphone :");
+                System.out.println(telephoneText);
                 nouveauContact.setTelephone(scan.nextLine());
                 break;
             } catch (ParseException e) {
@@ -78,7 +97,7 @@ public class App {
         }
         while(true) {
             try {
-                System.out.println("Date de naissance (format dd/MM/yyyy) :");
+                System.out.println(dateNaissanceText);
                 nouveauContact.setDateNaissance(scan.nextLine());
                 break;
             }
@@ -86,8 +105,7 @@ public class App {
                 System.out.println("Date de naissance non valide");
             }
         }
-        nouveauContact.enregistrer();
-        System.out.println("Contact enregistré !");
+        return nouveauContact;
     }
     public static void listeContact(ArrayList<Contact> contactList) {
         try {
@@ -108,12 +126,19 @@ public class App {
         }
         }
     private static void modifierContact(String mail) throws Exception {
-        //à améliorer
-        Contact.supprimer(mail);
+        Contact contact = Contact.rechercher(mail);
+        if(contact == null){
+            System.out.println("Contact introuvable");
+            return;
+        }
         System.out.println("Veuillez mettre à jour les informations du contact");
-        ajouterContact();
+        Contact.updateContact(mail, createContact(contact));
     }
     private static void supprimerContact(String mail) throws Exception {
+        if(Contact.rechercher(mail) == null){
+            System.out.println("Contact introuvable");
+            return;
+        };
         Contact.supprimer(mail);
         System.out.println("Contact supprimé");
     }

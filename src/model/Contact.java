@@ -60,6 +60,7 @@ public class Contact implements Comparable<Contact>{
     public static boolean patternMatches(String input, String pattern){
         return Pattern.compile(pattern).matcher(input).matches();
     }
+
     public void enregistrer() throws IOException {
         PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("contacts.csv", true)));
         try {
@@ -68,6 +69,26 @@ public class Contact implements Comparable<Contact>{
             pw.close();
         }
     }
+
+    public static Contact rechercher(String mail) throws Exception {
+        try (BufferedReader br = new BufferedReader(new FileReader("contacts.csv"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if(line.contains(mail)){
+                    Contact c = new Contact();
+                    String[] fields = CSV_PATTERN.split(line);
+                    c.setNom(fields[0]);
+                    c.setPrenom(fields[1]);
+                    c.setMail(fields[2]);
+                    c.setTelephone(fields[3]);
+                    c.setDateNaissance(fields[4]);
+                    return c;
+                }
+            }
+        }
+        return null;
+    }
+
     public static void supprimer(String mail) throws Exception {
         BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
         String line;
@@ -86,6 +107,26 @@ public class Contact implements Comparable<Contact>{
         }
         bw.close();
     }
+
+    public static void updateContact(String mail, Contact updatedContact) throws Exception {
+        BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
+        String line;
+        ArrayList<String> fileContents = new ArrayList<>();
+        while ((line = br.readLine()) != null) {
+            if(line.contains(mail)){
+                line = updatedContact.toString();
+            }
+            fileContents.add(line);
+        }
+        br.close();
+        BufferedWriter bw = new BufferedWriter(new FileWriter("contacts.csv"));
+        for (String s : fileContents) {
+            bw.write(s);
+            bw.newLine();
+        }
+        bw.close();
+    }
+
     public static ArrayList<Contact> lister() throws Exception {
         ArrayList<Contact> list = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader("contacts.csv"))) {
@@ -103,6 +144,7 @@ public class Contact implements Comparable<Contact>{
         }
         return list;
     }
+
     @Override
     public String toString() {
         StringBuilder build = new StringBuilder();
