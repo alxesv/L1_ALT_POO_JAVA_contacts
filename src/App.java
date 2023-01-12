@@ -1,13 +1,9 @@
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import model.Contact;
 
 public class App {
@@ -73,78 +69,32 @@ public class App {
         }
     }
 
-    public static Contact createContact(Contact PlaceHolderContact) throws IOException, ParseException {
+    public static Contact createContact(Contact PlaceHolderContact){
         Contact nouveauContact = new Contact();
-        String nomText, prenomText, mailText, telephoneText, dateNaissanceText;
-        String inputNom, inputPrenom, inputMail, inputTelephone, inputDateNaissance;
-
+        String[] contactInfoTypes = {"nom", "prénom", "email", "téléphone", "date de naissance"};
+        String[] contactInfoText;
         if (PlaceHolderContact != null) {
-            nomText = "Nom (" + PlaceHolderContact.getNom() + "):";
-            prenomText = "Prénom (" + PlaceHolderContact.getPrenom() + "):";
-            mailText = "Adresse mail (" + PlaceHolderContact.getMail() + "):";
-            telephoneText = "Numéro de téléphone (" + PlaceHolderContact.getTelephone() + "):";
-            dateNaissanceText = "Date de naissance (format dd/MM/yyyy) (" + PlaceHolderContact.getDateNaissance()
-                    + "):";
+            contactInfoText = new String[]{"Nom (" + PlaceHolderContact.getNom() + "):", "Prénom (" + PlaceHolderContact.getPrenom() + "):",
+                    "Adresse mail (" + PlaceHolderContact.getMail() + "):", "Numéro de téléphone (" + PlaceHolderContact.getTelephone() + "):",
+                    "Date de naissance (format dd/MM/yyyy) (" + PlaceHolderContact.getDateNaissance() + "):"};
         } else {
-            nomText = "Nom :";
-            prenomText = "Prénom :";
-            mailText = "Adresse mail :";
-            telephoneText = "Numéro de téléphone :";
-            dateNaissanceText = "Date de naissance (format dd/MM/yyyy) :";
+            contactInfoText = new String[]{"Nom:", "Prénom:", "Adresse mail:", "Numéro de téléphone:", "Date de naissance (format dd/MM/yyyy):"};
         }
-
-        // Check NOM valide + add
-        while (true) {
-            try {
-                System.out.println(nomText);
-                nouveauContact.setNom(scan.nextLine());
-                break;
-            } catch (ParseException e) {
-                System.out.println("Format nom invalide");
-            }
-        }
-
-        // Check PRENOM valide + add
-        while (true) {
-            try {
-                System.out.println(prenomText);
-                nouveauContact.setPrenom(scan.nextLine());
-                break;
-            } catch (ParseException e) {
-                System.out.println("Format prénom invalide");
-            }
-        }
-
-        // Check MAIL valide + add
-        while (true) {
-            try {
-                System.out.println(mailText);
-                nouveauContact.setMail(scan.nextLine());
-                break;
-            } catch (ParseException e) {
-                System.out.println("Format d'email invalide");
-            }
-        }
-
-        // Check TELEPHONE valide + add
-        while (true) {
-            try {
-                System.out.println(telephoneText);
-                nouveauContact.setTelephone(scan.nextLine());
-                break;
-            } catch (ParseException e) {
-                System.out.println("Téléphone invalide");
-            }
-        }
-
-        // Check DATE DE NAISSANCE valide + add
-        while (true) {
-            try {
-                System.out.println(dateNaissanceText);
-                nouveauContact.setDateNaissance(scan.nextLine());
-                break;
-            } catch (ParseException e) {
-                System.out.println("Date de naissance non valide");
+        for (int i = 0; i < contactInfoTypes.length; i++) {
+            while (true) {
+                try {
+                    System.out.println(contactInfoText[i]);
+                    switch (i) {
+                        case 0 -> nouveauContact.setNom(scan.nextLine());
+                        case 1 -> nouveauContact.setPrenom(scan.nextLine());
+                        case 2 -> nouveauContact.setMail(scan.nextLine());
+                        case 3 -> nouveauContact.setTelephone(scan.nextLine());
+                        case 4 -> nouveauContact.setDateNaissance(scan.nextLine());
+                    }
+                    break;
+                } catch (ParseException e) {
+                    System.out.println("Format " + contactInfoTypes[i] + " invalide");
+                }
             }
         }
         return nouveauContact;
