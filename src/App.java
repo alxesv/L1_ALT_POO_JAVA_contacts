@@ -12,8 +12,8 @@ import model.Contact;
 public class App {
     private static Scanner scan = new Scanner(System.in);
 
-    public static void main(String[] args) throws Exception{
-        while(true){
+    public static void main(String[] args) throws Exception {
+        while (true) {
             afficherMenu();
             String choix = scan.nextLine();
             switch (choix) {
@@ -51,7 +51,7 @@ public class App {
         }
     }
 
-    public static void afficherMenu(){
+    public static void afficherMenu() {
         ArrayList<String> menus = new ArrayList<>();
         menus.add("-- Menu --");
         menus.add("1 - Ajouter un contact");
@@ -63,33 +63,55 @@ public class App {
         menus.add("8 - Chercher par prénom");
         menus.add("q - Quitter");
         menus.add("Veuillez entrer un choix");
-        for (String menu : menus){
+        for (String menu : menus) {
             System.out.println(menu);
         }
     }
 
-    public static Contact createContact(Contact PlaceHolderContact) throws IOException {
+    public static Contact createContact(Contact PlaceHolderContact) throws IOException, ParseException {
         Contact nouveauContact = new Contact();
         String nomText, prenomText, mailText, telephoneText, dateNaissanceText;
+        String inputNom, inputPrenom, inputMail, inputTelephone, inputDateNaissance;
 
-        if(PlaceHolderContact != null){
+        if (PlaceHolderContact != null) {
             nomText = "Nom (" + PlaceHolderContact.getNom() + "):";
             prenomText = "Prénom (" + PlaceHolderContact.getPrenom() + "):";
             mailText = "Adresse mail (" + PlaceHolderContact.getMail() + "):";
             telephoneText = "Numéro de téléphone (" + PlaceHolderContact.getTelephone() + "):";
-            dateNaissanceText = "Date de naissance (format dd/MM/yyyy) (" + PlaceHolderContact.getDateNaissance() + "):";
-        }else{
+            dateNaissanceText = "Date de naissance (format dd/MM/yyyy) (" + PlaceHolderContact.getDateNaissance()
+                    + "):";
+        } else {
             nomText = "Nom :";
             prenomText = "Prénom :";
             mailText = "Adresse mail :";
             telephoneText = "Numéro de téléphone :";
             dateNaissanceText = "Date de naissance (format dd/MM/yyyy) :";
         }
-        System.out.println(nomText);
-        nouveauContact.setNom(scan.nextLine());
-        System.out.println(prenomText);
-        nouveauContact.setPrenom(scan.nextLine());
-        while(true) {
+
+        // Check NOM valide + add
+        while (true) {
+            try {
+                System.out.println(nomText);
+                nouveauContact.setNom(scan.nextLine());
+                break;
+            } catch (ParseException e) {
+                System.out.println("Format nom invalide");
+            }
+        }
+
+        // Check PRENOM valide + add
+        while (true) {
+            try {
+                System.out.println(prenomText);
+                nouveauContact.setPrenom(scan.nextLine());
+                break;
+            } catch (ParseException e) {
+                System.out.println("Format prénom invalide");
+            }
+        }
+
+        // Check MAIL valide + add
+        while (true) {
             try {
                 System.out.println(mailText);
                 nouveauContact.setMail(scan.nextLine());
@@ -98,7 +120,9 @@ public class App {
                 System.out.println("Format d'email invalide");
             }
         }
-        while(true) {
+
+        // Check TELEPHONE valide + add
+        while (true) {
             try {
                 System.out.println(telephoneText);
                 nouveauContact.setTelephone(scan.nextLine());
@@ -107,73 +131,85 @@ public class App {
                 System.out.println("Téléphone invalide");
             }
         }
-        while(true) {
+
+        // Check DATE DE NAISSANCE valide + add
+        while (true) {
             try {
                 System.out.println(dateNaissanceText);
                 nouveauContact.setDateNaissance(scan.nextLine());
                 break;
-            }
-            catch (ParseException e){
+            } catch (ParseException e) {
                 System.out.println("Date de naissance non valide");
             }
         }
         return nouveauContact;
     }
+
     public static void listeContact(ArrayList<Contact> contactList) {
         try {
-            if(contactList != null){
+            if (contactList != null) {
                 for (Contact contact : contactList) {
-                    System.out.println("Nom : " + contact.getNom() + "\nPrénom : " + contact.getPrenom() + "\nEmail : " + contact.getMail() + "\nTéléphone : " + contact.getTelephone() + "\nDate de naissance : " + contact.getDateNaissance());
+                    System.out.println("Nom : " + contact.getNom() + "\nPrénom : " + contact.getPrenom() + "\nEmail : "
+                            + contact.getMail() + "\nTéléphone : " + contact.getTelephone() + "\nDate de naissance : "
+                            + contact.getDateNaissance());
                     System.out.println();
                 }
-            }else {
+            } else {
                 ArrayList<Contact> list = Contact.lister();
                 for (Contact contact : list) {
-                    System.out.println("Nom : " + contact.getNom() + "\nPrénom : " + contact.getPrenom() + "\nEmail : " + contact.getMail() + "\nTéléphone : " + contact.getTelephone() + "\nDate de naissance : " + contact.getDateNaissance());
+                    System.out.println("Nom : " + contact.getNom() + "\nPrénom : " + contact.getPrenom() + "\nEmail : "
+                            + contact.getMail() + "\nTéléphone : " + contact.getTelephone() + "\nDate de naissance : "
+                            + contact.getDateNaissance());
                     System.out.println();
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        }
+    }
+
     private static void modifierContact(String mail) throws Exception {
         Contact contact = Contact.rechercher(mail);
-        if(contact == null){
+        if (contact == null) {
             System.out.println("Contact introuvable");
             return;
         }
         System.out.println("Veuillez mettre à jour les informations du contact");
         Contact.updateContact(mail, createContact(contact));
     }
+
     private static void supprimerContact(String mail) throws Exception {
-        if(Contact.rechercher(mail) == null){
+        if (Contact.rechercher(mail) == null) {
             System.out.println("Contact introuvable");
             return;
-        };
+        }
+        ;
         Contact.supprimer(mail);
         System.out.println("Contact supprimé");
     }
+
     private static void triParNom() {
-        try{
+        try {
             ArrayList<Contact> list = Contact.lister();
             Collections.sort(list);
             listeContact(list);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     private static ArrayList<Contact> chercherParPrenom() {
-        try{
+        try {
             ArrayList<Contact> list = Contact.lister();
             System.out.println("Prénom commençant par :");
             String recherche = scan.nextLine();
-            List<Contact> filteredList = list.stream().filter(c -> c.getPrenom().toLowerCase().startsWith(recherche.toLowerCase())).toList();
-            if(filteredList.isEmpty()){
+            List<Contact> filteredList = list.stream()
+                    .filter(c -> c.getPrenom().toLowerCase().startsWith(recherche.toLowerCase())).toList();
+            if (filteredList.isEmpty()) {
                 System.out.println("Pas de résultat");
             }
             return new ArrayList<>(filteredList);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

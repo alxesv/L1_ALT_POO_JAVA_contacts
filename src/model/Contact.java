@@ -1,4 +1,5 @@
 package model;
+
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,55 +11,74 @@ import java.util.Comparator;
 public class Contact implements Comparable<Contact>, Comparator<Contact> {
     private static final String SEPARATEUR = ";";
     private static final Pattern CSV_PATTERN = Pattern.compile(SEPARATEUR);
+    private static final String inputPattern = "^(?:(?<=^)[^\s" + SEPARATEUR + "]|^\s;)(?:[^" + SEPARATEUR + "]*[^\s;])?$";
+
     private String nom;
     private String prenom;
     private String mail;
     private String telephone;
     private Date dateNaissance;
 
-    public String getNom(){
+    public String getNom() {
         return this.nom;
     }
-    public String getPrenom(){
+
+    public String getPrenom() {
         return this.prenom;
     }
-    public String getMail(){
+
+    public String getMail() {
         return this.mail;
     }
-    public String getTelephone(){
+
+    public String getTelephone() {
         return this.telephone;
     }
-    public String getDateNaissance(){
+
+    public String getDateNaissance() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         return dateFormat.format(this.dateNaissance);
     }
 
-    public void setNom(String nom){
-        this.nom = nom;
+    public void setNom(String nom) throws ParseException {
+        if (patternMatches(nom, inputPattern)) {
+            this.nom = nom;
+        } else {
+            throw new ParseException("Format nom invalide", 0);
+        }
     }
-    public void setPrenom(String prenom){
-        this.prenom = prenom;
+
+    public void setPrenom(String prenom) throws ParseException {
+        if (patternMatches(prenom, inputPattern)) {
+            this.prenom = prenom;
+        } else {
+            throw new ParseException("Format prenom invalide", 0);
+        }
     }
+
     public void setMail(String mail) throws ParseException {
-        if(patternMatches(mail,"^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+        if (patternMatches(mail, "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")) {
             this.mail = mail;
-        }else{
-            throw new ParseException("Format invalide", 0);
+        } else {
+            throw new ParseException("Format mail invalide", 0);
         }
     }
+
     public void setTelephone(String telephone) throws ParseException {
-        if(patternMatches(telephone,"^(?:(?:\\+|00)33|0)\\s*[1-9](?:[\\s.-]*\\d{2}){4}$")) {
+        if (patternMatches(telephone, "^(?:(?:\\+|00)33|0)\\s*[1-9](?:[\\s.-]*\\d{2}){4}$")) {
             this.telephone = telephone;
-        }else{
+        } else {
             throw new ParseException("Format invalide", 0);
         }
     }
+
     public void setDateNaissance(String dateNaissance) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         this.dateNaissance = dateFormat.parse(dateNaissance);
     }
-    public static boolean patternMatches(String input, String pattern){
+
+    public static boolean patternMatches(String input, String pattern) {
         return Pattern.compile(pattern).matcher(input).matches();
     }
 
@@ -66,7 +86,7 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
         PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("contacts.csv", true)));
         try {
             pw.println(this.toString());
-        }finally {
+        } finally {
             pw.close();
         }
     }
@@ -75,7 +95,7 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
         try (BufferedReader br = new BufferedReader(new FileReader("contacts.csv"))) {
             String line;
             while ((line = br.readLine()) != null) {
-                if(line.contains(mail)){
+                if (line.contains(mail)) {
                     Contact c = new Contact();
                     String[] fields = CSV_PATTERN.split(line);
                     c.setNom(fields[0]);
@@ -95,7 +115,7 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
         String line;
         ArrayList<String> fileContents = new ArrayList<>();
         while ((line = br.readLine()) != null) {
-            if(line.contains(mail)){
+            if (line.contains(mail)) {
                 continue;
             }
             fileContents.add(line);
@@ -114,7 +134,7 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
         String line;
         ArrayList<String> fileContents = new ArrayList<>();
         while ((line = br.readLine()) != null) {
-            if(line.contains(mail)){
+            if (line.contains(mail)) {
                 line = updatedContact.toString();
             }
             fileContents.add(line);
@@ -163,8 +183,8 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
 
     @Override
     public int compareTo(Contact other) {
-       int nomCompare = this.nom.toLowerCase().compareTo(other.nom.toLowerCase());
-        if(nomCompare != 0)
+        int nomCompare = this.nom.toLowerCase().compareTo(other.nom.toLowerCase());
+        if (nomCompare != 0)
             return nomCompare;
         else
             return this.prenom.toLowerCase().compareTo(other.prenom.toLowerCase());
