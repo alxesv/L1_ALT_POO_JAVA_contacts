@@ -11,30 +11,30 @@ public class App {
 
     public static void main(String[] args) throws Exception {
         while (true) {
-            afficherMenu();
-            String choix = scan.nextLine();
-            switch (choix) {
+            showMenu();
+            String choice = scan.nextLine();
+            switch (choice) {
                 case "1" -> {
                     Contact newContact = createContact(null);
-                    newContact.enregistrer();
+                    newContact.save();
                     System.out.println("Contact enregistré !");
                 }
                 case "2" -> filterSubMenu();
                 case "3" -> {
                     System.out.println("Entrez l'adresse email actuelle du contact à modifier");
                     String mail = scan.nextLine();
-                    modifierContact(mail);
+                    modifyContact(mail);
                 }
                 case "4" -> {
                     System.out.println("Entrez l'adresse email du contact à supprimer");
                     String mail = scan.nextLine();
-                    supprimerContact(mail);
+                    deleteContact(mail);
                 }
                 case "5" -> {
-                    listeContact(chercherParPrenom());
+                    listContacts(searchByName());
                 }
                 case "q" -> {
-                    System.out.println("Exiting --");
+                    System.out.println("Fermeture --");
                     return;
                 }
                 default -> System.out.println("Veuillez choisir une option valable");
@@ -42,7 +42,7 @@ public class App {
         }
     }
 
-    public static void afficherMenu() {
+    public static void showMenu() {
         ArrayList<String> menus = new ArrayList<>();
         menus.add("-- Menu --");
         menus.add("1 - Ajouter un contact");
@@ -57,7 +57,7 @@ public class App {
         }
     }
 
-    public static void afficherFilterSubMenu() {
+    public static void showFilterSubMenu() {
         ArrayList<String> menus = new ArrayList<>();
         menus.add("-- Sous Menu --");
         menus.add("1 - Pas de tri");
@@ -73,27 +73,27 @@ public class App {
 
     public static void filterSubMenu() {
         while (true) {
-            afficherFilterSubMenu();
-            String choix = scan.nextLine();
-            switch (choix) {
+            showFilterSubMenu();
+            String choice = scan.nextLine();
+            switch (choice) {
                 case "1" -> {
-                    listeContact(null);
+                    listContacts(null);
                     return;
                 }
                 case "2" -> {
-                    triParNom();
+                    sortBySurname();
                     return;
                 }
                 case "3" -> {
-                    triParDateNaissance();
+                    sortByBirthDate();
                     return;
                 }
                 case "4" -> {
-                    triParMail();
+                    sortByMail();
                     return;
                 }
                 case "q" -> {
-                    System.out.println("Back to main menu --");
+                    System.out.println("Retour au menu principal --");
                     return;
                 }
                 default -> System.out.println("Veuillez choisir une option valable");
@@ -102,13 +102,13 @@ public class App {
     }
 
     public static Contact createContact(Contact PlaceHolderContact){
-        Contact nouveauContact = new Contact();
+        Contact newContact = new Contact();
         String[] contactInfoTypes = {"nom", "prénom", "email", "téléphone", "date de naissance"};
         String[] contactInfoText;
         if (PlaceHolderContact != null) {
-            contactInfoText = new String[]{"Nom (" + PlaceHolderContact.getNom() + "):", "Prénom (" + PlaceHolderContact.getPrenom() + "):",
+            contactInfoText = new String[]{"Nom (" + PlaceHolderContact.getSurname() + "):", "Prénom (" + PlaceHolderContact.getName() + "):",
                     "Adresse mail (" + PlaceHolderContact.getMail() + "):", "Numéro de téléphone (" + PlaceHolderContact.getTelephone() + "):",
-                    "Date de naissance (format dd/MM/yyyy) (" + PlaceHolderContact.getDateNaissance() + "):"};
+                    "Date de naissance (format dd/MM/yyyy) (" + PlaceHolderContact.getBirthDate() + "):"};
         } else {
             contactInfoText = new String[]{"Nom:", "Prénom:", "Adresse mail:", "Numéro de téléphone:", "Date de naissance (format dd/MM/yyyy):"};
         }
@@ -118,27 +118,27 @@ public class App {
                     System.out.println(contactInfoText[i]);
                     switch (i) {
                         case 0 -> {
-                          String nom = scan.nextLine();
-                          if(nom.equals("") && PlaceHolderContact != null){
-                            nouveauContact.setNom(PlaceHolderContact.getNom());
+                          String surname = scan.nextLine();
+                          if(surname.equals("") && PlaceHolderContact != null){
+                            newContact.setSurname(PlaceHolderContact.getSurname());
                           } else {
-                            nouveauContact.setNom(nom);
+                            newContact.setSurname(surname);
                           }
                         }
                         case 1 -> {
-                          String prenom = scan.nextLine();
-                          if(prenom.equals("") && PlaceHolderContact != null){
-                            nouveauContact.setPrenom(PlaceHolderContact.getPrenom());
+                          String name = scan.nextLine();
+                          if(name.equals("") && PlaceHolderContact != null){
+                            newContact.setName(PlaceHolderContact.getName());
                           } else {
-                            nouveauContact.setPrenom(prenom);
+                            newContact.setName(name);
                           }
                         }
                         case 2 -> {
                             String mail = scan.nextLine();
                             if(mail.equals("") && PlaceHolderContact != null){
-                              nouveauContact.setMail(PlaceHolderContact.getMail());
-                            } else if(Contact.rechercher(mail) == null || (PlaceHolderContact != null && mail.equals(PlaceHolderContact.getMail()))){
-                              nouveauContact.setMail(mail);
+                              newContact.setMail(PlaceHolderContact.getMail());
+                            } else if(Contact.search(mail) == null || (PlaceHolderContact != null && mail.equals(PlaceHolderContact.getMail()))){
+                              newContact.setMail(mail);
                             } else {
                               throw new Exception("Email déjà utilisé");
                             }
@@ -146,17 +146,17 @@ public class App {
                         case 3 -> {
                           String telephone = scan.nextLine();
                           if(telephone.equals("") && PlaceHolderContact != null){
-                            nouveauContact.setTelephone(PlaceHolderContact.getTelephone());
+                            newContact.setTelephone(PlaceHolderContact.getTelephone());
                           } else {
-                            nouveauContact.setTelephone(telephone);
+                            newContact.setTelephone(telephone);
                           }
                         }
                         case 4 -> {
-                          String dateNaissance = scan.nextLine();
-                          if(dateNaissance.equals("") && PlaceHolderContact != null){
-                            nouveauContact.setDateNaissance(PlaceHolderContact.getDateNaissance());
+                          String birthDate = scan.nextLine();
+                          if(birthDate.equals("") && PlaceHolderContact != null){
+                            newContact.setBirthDate(PlaceHolderContact.getBirthDate());
                           } else {
-                            nouveauContact.setDateNaissance(dateNaissance);
+                            newContact.setBirthDate(birthDate);
                           }
                         }
                     }
@@ -168,24 +168,24 @@ public class App {
                 }
             }
         }
-        return nouveauContact;
+        return newContact;
     }
 
-    public static void listeContact(ArrayList<Contact> contactList) {
+    public static void listContacts(ArrayList<Contact> contactList) {
         try {
             if (contactList != null) {
                 for (Contact contact : contactList) {
-                    System.out.println("Nom : " + contact.getNom() + "\nPrénom : " + contact.getPrenom() + "\nEmail : "
+                    System.out.println("Nom : " + contact.getSurname() + "\nPrénom : " + contact.getName() + "\nEmail : "
                             + contact.getMail() + "\nTéléphone : " + contact.getTelephone() + "\nDate de naissance : "
-                            + contact.getDateNaissance());
+                            + contact.getBirthDate());
                     System.out.println();
                 }
             } else {
-                ArrayList<Contact> list = Contact.lister();
+                ArrayList<Contact> list = Contact.list();
                 for (Contact contact : list) {
-                    System.out.println("Nom : " + contact.getNom() + "\nPrénom : " + contact.getPrenom() + "\nEmail : "
+                    System.out.println("Nom : " + contact.getSurname() + "\nPrénom : " + contact.getName() + "\nEmail : "
                             + contact.getMail() + "\nTéléphone : " + contact.getTelephone() + "\nDate de naissance : "
-                            + contact.getDateNaissance());
+                            + contact.getBirthDate());
                     System.out.println();
                 }
             }
@@ -194,8 +194,8 @@ public class App {
         }
     }
 
-    private static void modifierContact(String mail) throws Exception {
-        Contact contact = Contact.rechercher(mail);
+    private static void modifyContact(String mail) throws Exception {
+        Contact contact = Contact.search(mail);
         if (contact == null) {
             System.out.println("Contact introuvable");
             return;
@@ -204,33 +204,33 @@ public class App {
         Contact.updateContact(mail, createContact(contact));
     }
 
-    private static void supprimerContact(String mail) throws Exception {
-        if (Contact.rechercher(mail) == null) {
+    private static void deleteContact(String mail) throws Exception {
+        if (Contact.search(mail) == null) {
             System.out.println("Contact introuvable");
             return;
         }
         ;
-        Contact.supprimer(mail);
+        Contact.delete(mail);
         System.out.println("Contact supprimé");
     }
 
-    private static void triParNom() {
+    private static void sortBySurname() {
         try {
-            ArrayList<Contact> list = Contact.lister();
+            ArrayList<Contact> list = Contact.list();
             Collections.sort(list);
-            listeContact(list);
+            listContacts(list);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private static ArrayList<Contact> chercherParPrenom() {
+    private static ArrayList<Contact> searchByName() {
         try {
-            ArrayList<Contact> list = Contact.lister();
+            ArrayList<Contact> list = Contact.list();
             System.out.println("Prénom commençant par :");
-            String recherche = scan.nextLine();
+            String search = scan.nextLine();
             List<Contact> filteredList = list.stream()
-                    .filter(c -> c.getPrenom().toLowerCase().startsWith(recherche.toLowerCase())).toList();
+                    .filter(c -> c.getName().toLowerCase().startsWith(search.toLowerCase())).toList();
             if (filteredList.isEmpty()) {
                 System.out.println("Pas de résultat");
             }
@@ -241,26 +241,26 @@ public class App {
         }
     }
 
-    private static void triParDateNaissance() {
+    private static void sortByBirthDate() {
         try {
-            ArrayList<Contact> list = Contact.lister();
+            ArrayList<Contact> list = Contact.list();
             Collections.sort(list, new Contact());
-            listeContact(list);
+            listContacts(list);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private static void triParMail() {
+    private static void sortByMail() {
         try {
-            ArrayList<Contact> list = Contact.lister();
+            ArrayList<Contact> list = Contact.list();
             Collections.sort(list, new Comparator<Contact>(){
                 @Override
                 public int compare(Contact c1, Contact c2) {
                     return c1.getMail().toLowerCase().compareTo(c2.getMail().toLowerCase());
                 }
             });
-            listeContact(list);
+            listContacts(list);
         } catch (Exception e) {
             e.printStackTrace();
         }

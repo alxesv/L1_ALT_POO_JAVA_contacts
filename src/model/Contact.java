@@ -8,22 +8,22 @@ import java.util.regex.Pattern;
 import java.util.Comparator;
 
 public class Contact implements Comparable<Contact>, Comparator<Contact> {
-    private static final String SEPARATEUR = ";";
-    private static final Pattern CSV_PATTERN = Pattern.compile(SEPARATEUR);
-    private static final String inputPattern = "^(?:(?<=^)[^\s" + SEPARATEUR + "]|^\s;)(?:[^" + SEPARATEUR + "]*[^\s;])?$";
+    private static final String SEPARATOR = ";";
+    private static final Pattern CSV_PATTERN = Pattern.compile(SEPARATOR);
+    private static final String inputPattern = "^(?:(?<=^)[^\s" + SEPARATOR + "]|^\s;)(?:[^" + SEPARATOR + "]*[^\s;])?$";
 
-    private String nom;
-    private String prenom;
+    private String surname;
+    private String name;
     private String mail;
     private String telephone;
-    private Date dateNaissance;
+    private Date birthDate;
 
-    public String getNom() {
-        return this.nom;
+    public String getSurname() {
+        return this.surname;
     }
 
-    public String getPrenom() {
-        return this.prenom;
+    public String getName() {
+        return this.name;
     }
 
     public String getMail() {
@@ -34,22 +34,22 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
         return this.telephone;
     }
 
-    public String getDateNaissance() {
+    public String getBirthDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        return dateFormat.format(this.dateNaissance);
+        return dateFormat.format(this.birthDate);
     }
 
-    public void setNom(String nom) throws ParseException {
-        if (patternMatches(nom, inputPattern)) {
-            this.nom = nom;
+    public void setSurname(String surname) throws ParseException {
+        if (patternMatches(surname, inputPattern)) {
+            this.surname = surname;
         } else {
             throw new ParseException("Format nom invalide", 0);
         }
     }
 
-    public void setPrenom(String prenom) throws ParseException {
-        if (patternMatches(prenom, inputPattern)) {
-            this.prenom = prenom;
+    public void setName(String name) throws ParseException {
+        if (patternMatches(name, inputPattern)) {
+            this.name = name;
         } else {
             throw new ParseException("Format prenom invalide", 0);
         }
@@ -72,16 +72,16 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
         }
     }
 
-    public void setDateNaissance(String dateNaissance) throws ParseException {
+    public void setBirthDate(String birthDate) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        this.dateNaissance = dateFormat.parse(dateNaissance);
+        this.birthDate = dateFormat.parse(birthDate);
     }
 
     public static boolean patternMatches(String input, String pattern) {
         return Pattern.compile(pattern).matcher(input).matches();
     }
 
-    public void enregistrer() throws IOException {
+    public void save() throws IOException {
         PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("contacts.csv", true)));
         try {
             pw.println(this.toString());
@@ -90,18 +90,18 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
         }
     }
 
-    public static Contact rechercher(String mail) throws Exception {
+    public static Contact search(String mail) throws Exception {
         try (BufferedReader br = new BufferedReader(new FileReader("contacts.csv"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.contains(mail)) {
                     Contact c = new Contact();
                     String[] fields = CSV_PATTERN.split(line);
-                    c.setNom(fields[0]);
-                    c.setPrenom(fields[1]);
+                    c.setSurname(fields[0]);
+                    c.setName(fields[1]);
                     c.setMail(fields[2]);
                     c.setTelephone(fields[3]);
-                    c.setDateNaissance(fields[4]);
+                    c.setBirthDate(fields[4]);
                     return c;
                 }
             }
@@ -109,7 +109,7 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
         return null;
     }
 
-    public static void supprimer(String mail) throws Exception {
+    public static void delete(String mail) throws Exception {
         BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
         String line;
         ArrayList<String> fileContents = new ArrayList<>();
@@ -147,18 +147,18 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
         bw.close();
     }
 
-    public static ArrayList<Contact> lister() throws Exception {
+    public static ArrayList<Contact> list() throws Exception {
         ArrayList<Contact> list = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader("contacts.csv"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 Contact c = new Contact();
                 String[] fields = CSV_PATTERN.split(line);
-                c.setNom(fields[0]);
-                c.setPrenom(fields[1]);
+                c.setSurname(fields[0]);
+                c.setName(fields[1]);
                 c.setMail(fields[2]);
                 c.setTelephone(fields[3]);
-                c.setDateNaissance(fields[4]);
+                c.setBirthDate(fields[4]);
                 list.add(c);
             }
         }
@@ -168,31 +168,31 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
     @Override
     public String toString() {
         StringBuilder build = new StringBuilder();
-        build.append(this.getNom());
-        build.append(SEPARATEUR);
-        build.append(this.getPrenom());
-        build.append(SEPARATEUR);
+        build.append(this.getSurname());
+        build.append(SEPARATOR);
+        build.append(this.getName());
+        build.append(SEPARATOR);
         build.append(this.getMail());
-        build.append(SEPARATEUR);
+        build.append(SEPARATOR);
         build.append(this.getTelephone());
-        build.append(SEPARATEUR);
-        build.append(this.getDateNaissance());
+        build.append(SEPARATOR);
+        build.append(this.getBirthDate());
         return build.toString();
     }
 
     @Override
     public int compareTo(Contact other) {
-        int nomCompare = this.nom.toLowerCase().compareTo(other.nom.toLowerCase());
+        int nomCompare = this.surname.toLowerCase().compareTo(other.surname.toLowerCase());
         if (nomCompare != 0)
             return nomCompare;
         else
-            return this.prenom.toLowerCase().compareTo(other.prenom.toLowerCase());
+            return this.name.toLowerCase().compareTo(other.name.toLowerCase());
     }
 
     @Override
     public int compare(Contact c1, Contact c2) {
-        if (c1.getDateNaissance() == null || c2.getDateNaissance() == null)
+        if (c1.getBirthDate() == null || c2.getBirthDate() == null)
             return 0;
-        return c1.dateNaissance.compareTo(c2.dateNaissance);
+        return c1.birthDate.compareTo(c2.birthDate);
     }
 }
