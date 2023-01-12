@@ -3,17 +3,21 @@ Mathys CESAIRE
 -Modifier contact
 -Compilation
 -(Bonus) Sous menu affichage contact
+-(Bonus) Permettre  d'appuyer sur entrer pour garder les anciennes valeurs pour la modification
 
 Alexandre SOUVOROV
 -Création du repo github
 -Supprimer contact
 -Trier par nom
 -Recherche par prénom
+-Refractor des fonctions et variables en anglais
 
 Kenza TIGHRINE
 -Trier par mail
 -Vérification email unique
+-(Bonus) Permettre  d'appuyer sur entrer pour garder les anciennes valeurs pour la modification
 
 Kevin VONG
 -Trier par date de naissance
 -(Bonus) Regex pour sécuriser les inputs
+-Commentaires
