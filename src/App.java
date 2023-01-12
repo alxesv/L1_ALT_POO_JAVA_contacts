@@ -36,6 +36,9 @@ public class App {
                 case "5" -> {
                     triParNom();
                 }
+                case "6" -> {
+                    triParDateNaissance();
+                }
                 case "8" -> {
                     listeContact(chercherParPrenom());
                 }
@@ -56,6 +59,7 @@ public class App {
         menus.add("3 - Modifier un contact");
         menus.add("4 - Supprimer un contact");
         menus.add("5 - Trier par nom");
+        menus.add("6 - Trier par date de naissance");
         menus.add("8 - Chercher par prénom");
         menus.add("q - Quitter");
         menus.add("Veuillez entrer un choix");
@@ -172,6 +176,16 @@ public class App {
         }catch (Exception e){
             e.printStackTrace();
             return null;
+        }
+    }
+
+    private static void triParDateNaissance() {
+        try {
+            ArrayList<Contact> list = Contact.lister();
+            Collections.sort(list, new Contact());
+            listeContact(list);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
