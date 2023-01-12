@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -39,6 +40,9 @@ public class App {
                 case "6" -> {
                     triParDateNaissance();
                 }
+                case "7" -> {
+                    triParMail();
+                }
                 case "8" -> {
                     listeContact(chercherParPrenom());
                 }
@@ -60,6 +64,7 @@ public class App {
         menus.add("4 - Supprimer un contact");
         menus.add("5 - Trier par nom");
         menus.add("6 - Trier par date de naissance");
+        menus.add("7 - Trier par mail");
         menus.add("8 - Chercher par prénom");
         menus.add("q - Quitter");
         menus.add("Veuillez entrer un choix");
@@ -219,6 +224,21 @@ public class App {
         try {
             ArrayList<Contact> list = Contact.lister();
             Collections.sort(list, new Contact());
+            listeContact(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void triParMail() {
+        try {
+            ArrayList<Contact> list = Contact.lister();
+            Collections.sort(list, new Comparator<Contact>(){
+                @Override
+                public int compare(Contact c1, Contact c2) {
+                    return c1.getMail().toLowerCase().compareTo(c2.getMail().toLowerCase());
+                }
+            });
             listeContact(list);
         } catch (Exception e) {
             e.printStackTrace();
