@@ -23,7 +23,7 @@ public class App {
                     newContact.enregistrer();
                     System.out.println("Contact enregistré !");
                 }
-                case "2" -> listeContact(null);
+                case "2" -> filterSubMenu();
                 case "3" -> {
                     System.out.println("Entrez l'adresse email actuelle du contact à modifier");
                     String mail = scan.nextLine();
@@ -35,15 +35,6 @@ public class App {
                     supprimerContact(mail);
                 }
                 case "5" -> {
-                    triParNom();
-                }
-                case "6" -> {
-                    triParDateNaissance();
-                }
-                case "7" -> {
-                    triParMail();
-                }
-                case "8" -> {
                     listeContact(chercherParPrenom());
                 }
                 case "q" -> {
@@ -62,14 +53,55 @@ public class App {
         menus.add("2 - Lister les contacts");
         menus.add("3 - Modifier un contact");
         menus.add("4 - Supprimer un contact");
-        menus.add("5 - Trier par nom");
-        menus.add("6 - Trier par date de naissance");
-        menus.add("7 - Trier par mail");
-        menus.add("8 - Chercher par prénom");
+        menus.add("5 - Chercher par prénom");
         menus.add("q - Quitter");
         menus.add("Veuillez entrer un choix");
         for (String menu : menus) {
             System.out.println(menu);
+        }
+    }
+
+    public static void afficherFilterSubMenu() {
+        ArrayList<String> menus = new ArrayList<>();
+        menus.add("-- Sous Menu --");
+        menus.add("1 - Pas de tri");
+        menus.add("2 - Trier par nom");
+        menus.add("3 - Trier par date de naissance");
+        menus.add("4 - Trier par mail");
+        menus.add("q - Quitter");
+        menus.add("Veuillez entrer un choix");
+        for (String menu : menus) {
+            System.out.println(menu);
+        }
+    }
+
+    public static void filterSubMenu() {
+        while (true) {
+            afficherFilterSubMenu();
+            String choix = scan.nextLine();
+            switch (choix) {
+                case "1" -> {
+                    listeContact(null);
+                    return;
+                }
+                case "2" -> {
+                    triParNom();
+                    return;
+                }
+                case "3" -> {
+                    triParDateNaissance();
+                    return;
+                }
+                case "4" -> {
+                    triParMail();
+                    return;
+                }
+                case "q" -> {
+                    System.out.println("Back to main menu --");
+                    return;
+                }
+                default -> System.out.println("Veuillez choisir une option valable");
+            }
         }
     }
 
