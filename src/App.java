@@ -117,15 +117,54 @@ public class App {
                 try {
                     System.out.println(contactInfoText[i]);
                     switch (i) {
-                        case 0 -> nouveauContact.setNom(scan.nextLine());
-                        case 1 -> nouveauContact.setPrenom(scan.nextLine());
-                        case 2 -> nouveauContact.setMail(scan.nextLine());
-                        case 3 -> nouveauContact.setTelephone(scan.nextLine());
-                        case 4 -> nouveauContact.setDateNaissance(scan.nextLine());
+                        case 0 -> {
+                          String nom = scan.nextLine();
+                          if(nom.equals("") && PlaceHolderContact != null){
+                            nouveauContact.setNom(PlaceHolderContact.getNom());
+                          } else {
+                            nouveauContact.setNom(nom);
+                          }
+                        }
+                        case 1 -> {
+                          String prenom = scan.nextLine();
+                          if(prenom.equals("") && PlaceHolderContact != null){
+                            nouveauContact.setPrenom(PlaceHolderContact.getPrenom());
+                          } else {
+                            nouveauContact.setPrenom(prenom);
+                          }
+                        }
+                        case 2 -> {
+                            String mail = scan.nextLine();
+                            if(mail.equals("") && PlaceHolderContact != null){
+                              nouveauContact.setMail(PlaceHolderContact.getMail());
+                            } else if(Contact.rechercher(mail) == null || (PlaceHolderContact != null && mail.equals(PlaceHolderContact.getMail()))){
+                              nouveauContact.setMail(mail);
+                            } else {
+                              throw new Exception("Email déjà utilisé");
+                            }
+                        }
+                        case 3 -> {
+                          String telephone = scan.nextLine();
+                          if(telephone.equals("") && PlaceHolderContact != null){
+                            nouveauContact.setTelephone(PlaceHolderContact.getTelephone());
+                          } else {
+                            nouveauContact.setTelephone(telephone);
+                          }
+                        }
+                        case 4 -> {
+                          String dateNaissance = scan.nextLine();
+                          if(dateNaissance.equals("") && PlaceHolderContact != null){
+                            nouveauContact.setDateNaissance(PlaceHolderContact.getDateNaissance());
+                          } else {
+                            nouveauContact.setDateNaissance(dateNaissance);
+                          }
+                        }
                     }
                     break;
                 } catch (ParseException e) {
                     System.out.println("Format " + contactInfoTypes[i] + " invalide");
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
                 }
             }
         }
