@@ -5,8 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Pattern;
+import java.util.Comparator;
 
-public class Contact implements Comparable<Contact>{
+public class Contact implements Comparable<Contact>, Comparator<Contact> {
     private static final String SEPARATEUR = ";";
     private static final Pattern CSV_PATTERN = Pattern.compile(SEPARATEUR);
     private String nom;
@@ -167,5 +168,12 @@ public class Contact implements Comparable<Contact>{
             return nomCompare;
         else
             return this.prenom.toLowerCase().compareTo(other.prenom.toLowerCase());
+    }
+
+    @Override
+    public int compare(Contact c1, Contact c2) {
+        if (c1.getDateNaissance() == null || c2.getDateNaissance() == null)
+            return 0;
+        return c1.dateNaissance.compareTo(c2.dateNaissance);
     }
 }
