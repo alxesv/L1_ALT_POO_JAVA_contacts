@@ -1,0 +1,19 @@
+Mathys CESAIRE
+-Création du trello
+-Modifier contact
+-Compilation
+-(Bonus) Sous menu affichage contact
+
+Alexandre SOUVOROV
+-Création du repo github
+-Supprimer contact
+-Trier par nom
+-Recherche par prénom
+
+Kenza TIGHRINE
+-Trier par mail
+-Vérification email unique
+
+Kevin VONG
+-Trier par date de naissance
+-(Bonus) Regex pour sécuriser les inputs
