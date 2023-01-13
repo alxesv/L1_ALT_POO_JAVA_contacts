@@ -1,3 +1,4 @@
+package main;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,9 +7,25 @@ import java.util.List;
 import java.util.Scanner;
 import model.Contact;
 
+/**
+ * App is the main class of the application.
+ * 
+ * @author Alexandre, Kenza, Kevin, Mathys
+ * @version 1.0
+ */
 public class App {
+    /**
+     * Attribute scan: Scanner to read user input.
+     */
     private static Scanner scan = new Scanner(System.in);
 
+    /**
+     * Main loop of the application.
+     * @param args
+     *       Arguments passed to the application.
+     * @throws Exception
+     *      Exception thrown by the application.
+     */
     public static void main(String[] args) throws Exception {
         while (true) {
             showMenu();
@@ -41,7 +58,9 @@ public class App {
             }
         }
     }
-
+/**
+ * Display the main menu.
+ */
     public static void showMenu() {
         ArrayList<String> menus = new ArrayList<>();
         menus.add("-- Menu --");
@@ -56,7 +75,9 @@ public class App {
             System.out.println(menu);
         }
     }
-
+/**
+ * Display the submenu.
+ */
     public static void showFilterSubMenu() {
         ArrayList<String> menus = new ArrayList<>();
         menus.add("-- Sous Menu --");
@@ -70,7 +91,9 @@ public class App {
             System.out.println(menu);
         }
     }
-
+/**
+ * Logic of the submenu.
+ */
     public static void filterSubMenu() {
         while (true) {
             showFilterSubMenu();
@@ -100,7 +123,13 @@ public class App {
             }
         }
     }
-
+    /**
+     * Create a new contact with user input.
+     * @param PlaceHolderContact
+     *     Contact to be modified (null if new contact).
+     * @return Contact
+     *    The new contact.
+     */
     public static Contact createContact(Contact PlaceHolderContact){
         Contact newContact = new Contact();
         String[] contactInfoTypes = {"nom", "prénom", "email", "téléphone", "date de naissance"};
@@ -170,7 +199,11 @@ public class App {
         }
         return newContact;
     }
-
+/**
+ * Display the selected list of contacts, or all contacts if null.
+ * @param contactList
+ *    List of contacts to be displayed.
+ */
     public static void listContacts(ArrayList<Contact> contactList) {
         try {
             if (contactList != null) {
@@ -193,7 +226,12 @@ public class App {
             e.printStackTrace();
         }
     }
-
+/**
+ * Update the contact informations with the given mail.
+ * @param mail
+ *   Mail of the contact to be updated.
+ * @throws Exception
+ */
     private static void modifyContact(String mail) throws Exception {
         Contact contact = Contact.search(mail);
         if (contact == null) {
@@ -203,7 +241,12 @@ public class App {
         System.out.println("Veuillez mettre à jour les informations du contact");
         Contact.updateContact(mail, createContact(contact));
     }
-
+/**
+ * Delete the contact with the given mail.
+ * @param mail
+ *  Mail of the contact to be deleted.
+ * @throws Exception
+ */
     private static void deleteContact(String mail) throws Exception {
         if (Contact.search(mail) == null) {
             System.out.println("Contact introuvable");
@@ -213,7 +256,9 @@ public class App {
         Contact.delete(mail);
         System.out.println("Contact supprimé");
     }
-
+/**
+ * Sort the contact list by surname.
+ */
     private static void sortBySurname() {
         try {
             ArrayList<Contact> list = Contact.list();
@@ -223,7 +268,10 @@ public class App {
             e.printStackTrace();
         }
     }
-
+/**
+ * Search a contact by name.
+ * @return List of contacts matching the search.
+ */
     private static ArrayList<Contact> searchByName() {
         try {
             ArrayList<Contact> list = Contact.list();
@@ -240,7 +288,9 @@ public class App {
             return null;
         }
     }
-
+/**
+ * Sort the contact list by birth date.
+ */
     private static void sortByBirthDate() {
         try {
             ArrayList<Contact> list = Contact.list();
@@ -250,7 +300,9 @@ public class App {
             e.printStackTrace();
         }
     }
-
+/**
+ * Sort the contact list by mail.
+ */
     private static void sortByMail() {
         try {
             ArrayList<Contact> list = Contact.list();
