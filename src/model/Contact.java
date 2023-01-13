@@ -115,7 +115,8 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
     }
 
     public static void delete(String mail) {
-        try {BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
+      try {
+        BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
         String line;
         ArrayList<String> fileContents = new ArrayList<>();
         while ((line = br.readLine()) != null) {
