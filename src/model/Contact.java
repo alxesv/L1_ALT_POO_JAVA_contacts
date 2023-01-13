@@ -90,7 +90,7 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
         }
     }
 
-    public static Contact search(String mail) throws Exception {
+    public static Contact search(String mail) {
         try (BufferedReader br = new BufferedReader(new FileReader("contacts.csv"))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -105,12 +105,17 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
                     return c;
                 }
             }
+        } catch (FileNotFoundException e) {
+            System.out.println("Il n'y a pas de contact.");
+        } catch (Exception e) {
+            System.out.println("Erreur lors de la recherche du contact");
+
         }
         return null;
     }
 
-    public static void delete(String mail) throws Exception {
-        BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
+    public static void delete(String mail) {
+        try {BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
         String line;
         ArrayList<String> fileContents = new ArrayList<>();
         while ((line = br.readLine()) != null) {
@@ -126,10 +131,15 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
             bw.newLine();
         }
         bw.close();
+      } catch (FileNotFoundException e) {
+        System.out.println("Il n'y a pas de contact.");
+      } catch (Exception e) {
+        System.out.println("Erreur lors de la suppression du contact");
     }
-
-    public static void updateContact(String mail, Contact updatedContact) throws Exception {
-        BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
+  }
+    public static void updateContact(String mail, Contact updatedContact) {
+        try {
+          BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
         String line;
         ArrayList<String> fileContents = new ArrayList<>();
         while ((line = br.readLine()) != null) {
@@ -145,9 +155,14 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
             bw.newLine();
         }
         bw.close();
+      } catch (FileNotFoundException e) {
+        System.out.println("Il n'y a pas de contact.");
+      } catch (Exception e) {
+        System.out.println("Erreur lors de la mise à jour du contact");
+      }
     }
 
-    public static ArrayList<Contact> list() throws Exception {
+    public static ArrayList<Contact> list() {
         ArrayList<Contact> list = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader("contacts.csv"))) {
             String line;
@@ -161,6 +176,10 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
                 c.setBirthDate(fields[4]);
                 list.add(c);
             }
+        } catch (FileNotFoundException e) {
+            System.out.println("Il n'y a pas de contact.");
+        } catch (Exception e) {
+            System.out.println("Erreur lors du listing des contacts");
         }
         return list;
     }
