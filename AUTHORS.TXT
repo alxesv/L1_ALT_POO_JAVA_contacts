@@ -1,5 +1,8 @@
+Groupe: 
+- Mob programming -> javadoc
+
 Mathys CESAIRE
--Création du trello
+-Création du Trello
 -Modifier contact
 -Compilation
 -(Bonus) Sous menu affichage contact
@@ -15,6 +18,7 @@ Alexandre SOUVOROV
 Kenza TIGHRINE
 -Trier par mail
 -Vérification email unique
+-Gérer le cas où le fichier contacts.csv n'existe pas
 -(Bonus) Permettre  d'appuyer sur entrer pour garder les anciennes valeurs pour la modification
 
 Kevin VONG
