@@ -194,7 +194,11 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
      * Mail of the contact to search.
      * @return The contact if found, null otherwise.
      */
-    public static Contact search(String mail) {
+    public static Contact search(String mail) throws ParseException {
+        if (!patternMatches(mail, "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")) {
+        throw new ParseException("Format de mail invalide", 0);
+        }
         try (BufferedReader br = new BufferedReader(new FileReader("contacts.csv"))) {
             String line;
             while ((line = br.readLine()) != null) {
