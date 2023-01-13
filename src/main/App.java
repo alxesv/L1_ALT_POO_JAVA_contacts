@@ -1,4 +1,6 @@
 package main;
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -131,6 +133,15 @@ public class App {
      *    The new contact.
      */
     public static Contact createContact(Contact PlaceHolderContact){
+        String fileName = "contacts.csv";
+        File file = new File(fileName);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                System.out.println("An error occurred while creating file: " + e.getMessage());
+            }
+        }
         Contact newContact = new Contact();
         String[] contactInfoTypes = {"nom", "prénom", "email", "téléphone", "date de naissance"};
         String[] contactInfoText;
