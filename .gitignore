@@ -4,7 +4,6 @@ contacts.csv
 ##############################
 .mtj.tmp/
 *.class
-*.jar
 *.war
 *.ear
 *.nar
